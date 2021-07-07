@@ -2,6 +2,8 @@ const headerCityButton = document.querySelector(".header__city-button"),
   subheaderCart = document.querySelector(".subheader__cart"),
   cartOverlay = document.querySelector(".cart-overlay");
 
+let hash = location.hash.substring(1);
+
 headerCityButton.textContent =
   localStorage.getItem("lamoda-location") || "What is your city?";
 
@@ -61,10 +63,14 @@ const getData = async () => {
   }
 };
 
-const getGoods = (callback) => {
+const getGoods = (callback, value) => {
   getData()
     .then((data) => {
-      callback(data);
+      if (value) {
+        callback(data.filter((item) => item.category === value));
+      } else {
+        callback(data);
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -116,7 +122,7 @@ try {
     }
   };
 
-  getGoods(renderGoodsList);
+  getGoods(renderGoodsList, hash);
 } catch (err) {
   console.log(err);
 }
