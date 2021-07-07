@@ -1,6 +1,8 @@
 const headerCityButton = document.querySelector(".header__city-button"),
   subheaderCart = document.querySelector(".subheader__cart"),
-  cartOverlay = document.querySelector(".cart-overlay");
+  cartOverlay = document.querySelector(".cart-overlay"),
+  goodsTitle = document.querySelector(".goods__title"),
+  navigationItems = document.querySelectorAll(".navigation__item");
 
 let hash = location.hash.substring(1);
 
@@ -121,6 +123,19 @@ try {
       goodsList.append(card);
     }
   };
+
+  window.addEventListener("hashchange", () => {
+    hash = location.hash.substring(1);
+    getGoods(renderGoodsList, hash);
+    goodsTitle.textContent =
+      hash === "kids"
+        ? "Детям"
+        : hash === "men"
+        ? "Мужчинам"
+        : hash === "women"
+        ? "Женщинам"
+        : "";
+  });
 
   getGoods(renderGoodsList, hash);
 } catch (err) {
