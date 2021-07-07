@@ -59,9 +59,15 @@ const getData = async () => {
   }
 }
 
-getData().then(data => {
-    console.log(data)
-  })
-  .catch(err => {
-    console.log(err)
-  })
+const getGoods = (callback) => {
+  getData().then(data => {
+      callback(data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+};
+
+getGoods((data) => {
+  console.log(data)
+})
