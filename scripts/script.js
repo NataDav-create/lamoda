@@ -49,3 +49,19 @@ closeCart = (e) => {
 
 subheaderCart.addEventListener('click', openCart);
 cartOverlay.addEventListener('click', closeCart);
+
+const getData = async () => {
+  const data = await fetch('db.json');
+  if (data.ok) {
+    return data.json()
+  } else {
+    throw new Error(`Data was not received, error is ${data.status} ${data.statusText}`)
+  }
+}
+
+getData().then(data => {
+    console.log(data)
+  })
+  .catch(err => {
+    console.log(err)
+  })
