@@ -65,11 +65,11 @@ const getData = async () => {
   }
 };
 
-const getGoods = (callback, value) => {
+const getGoods = (callback, prop, value) => {
   getData()
     .then((data) => {
       if (value) {
-        callback(data.filter((item) => item.category === value));
+        callback(data.filter((item) => item[prop] === value));
       } else {
         callback(data);
       }
@@ -132,11 +132,49 @@ try {
 
   window.addEventListener("hashchange", () => {
     hash = location.hash.substring(1);
-    getGoods(renderGoodsList, hash);
+    getGoods(renderGoodsList, "category", hash);
     changeTitle();
   });
   changeTitle();
-  getGoods(renderGoodsList, hash);
+  getGoods(renderGoodsList, "category", hash);
 } catch (err) {
   console.log(err);
+}
+
+try {
+  let cardGood = document.querySelector(".card-good");
+  if (!cardGood) {
+    throw "This is not a card-good page";
+  }
+
+  const cardGoodImage = document.querySelector(".card-good__image"),
+    cardGoodBrand = document.querySelector(".card-good__brand"),
+    cardGoodTitle = document.querySelector(".card-good__title"),
+    cardGoodprice = document.querySelector(".card-good__price"),
+    cardGoodColor = document.querySelector(".card-good__color"),
+    cardGoodColorList = document.querySelector(".card-good__color-list"),
+    cardGoodSizes = document.querySelector(".card-good__sizes"),
+    cardGoodSizesList = document.querySelector(".card-good__sizes-list"),
+    cardGoodBuy = document.querySelector(".card-good__buy");
+
+  const renderCardGood = ([{ brand, name, cost, color, sizes, photo }]) => {
+    cardGoodImage.src = `goods-image/${photo}`;
+    cardGoodImage.alt = `${brand} ${name}`;
+    cardGoodBrand.textContent = brand;
+    cardGoodTitle.textContent = name;
+    cardGoodprice.textContent = `${cost} ₽`;
+    if (color) {
+      cardGoodColor.textContent = color[0];
+    } else {
+      cardGoodColor.style.display = "none";
+    }
+    if (sizes) {
+      cardGoodSizes.textContent = sizes[0];
+    } else {
+      cardGoodSizes.style.display = "none";
+    }
+  };
+  getGoods(renderCardGood, "id", hash);
+} catch (err) {
+  console.warn(err);
 }
