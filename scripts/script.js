@@ -89,6 +89,12 @@ try {
     throw "This is not a goods page!";
   }
 
+  const changeTitle = () => {
+    goodsTitle.textContent = document.querySelector(
+      `[href*="#${hash}"]`
+    ).textContent;
+  };
+
   const createCard = ({ id, preview, name, cost, brand, sizes }) => {
     let li = document.createElement("li");
     li.classList.add("goods__item");
@@ -127,16 +133,9 @@ try {
   window.addEventListener("hashchange", () => {
     hash = location.hash.substring(1);
     getGoods(renderGoodsList, hash);
-    goodsTitle.textContent =
-      hash === "kids"
-        ? "Детям"
-        : hash === "men"
-        ? "Мужчинам"
-        : hash === "women"
-        ? "Женщинам"
-        : "";
+    changeTitle();
   });
-
+  changeTitle();
   getGoods(renderGoodsList, hash);
 } catch (err) {
   console.log(err);
