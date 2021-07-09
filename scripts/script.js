@@ -41,6 +41,19 @@ const renderCart = () => {
   cartTotalCost.textContent = totalPrice + "₽";
 };
 
+const deleteItemCart = (id) => {
+  const cartItems = getLocalStorage();
+  const newCartItems = cartItems.filter((item) => item.id !== id);
+  setLocalStorage(newCartItems);
+};
+
+cartListGoods.addEventListener("click", (e) => {
+  if (e.target.matches(".btn-delete")) {
+    deleteItemCart(e.target.dataset.id);
+    renderCart();
+  }
+});
+
 const disableScroll = () => {
   const widthScroll = window.innerWidth - document.body.offsetWidth;
 
