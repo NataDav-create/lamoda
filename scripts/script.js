@@ -2,7 +2,9 @@ const headerCityButton = document.querySelector(".header__city-button"),
   subheaderCart = document.querySelector(".subheader__cart"),
   cartOverlay = document.querySelector(".cart-overlay"),
   goodsTitle = document.querySelector(".goods__title"),
-  navigationItems = document.querySelectorAll(".navigation__item");
+  cartListGoods = document.querySelector(".cart__list-goods"),
+  navigationItems = document.querySelectorAll(".navigation__item"),
+  cartTotalCost = document.querySelector(".cart__total-cost");
 
 let hash = location.hash.substring(1);
 
@@ -14,6 +16,30 @@ const getLocalStorage = () =>
 
 const setLocalStorage = (data) =>
   localStorage.setItem("cart-lamoda", JSON.stringify(data));
+
+const renderCart = () => {
+  cartListGoods.textContent = "";
+  const cartItems = getLocalStorage();
+  let totalPrice = 0;
+
+  cartItems.forEach((item, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${item.brand} ${item.name}</td>
+        ${item.color ? `<td>${item.color}</td>` : "<td>-</td>"}
+         ${item.size ? `<td>${item.size}</td>` : "<td>-</td>"}
+        <td>${item.cost} &#8381;</>
+        <td><button class="btn-delete" data-id="${
+          item.id
+        }">&times;</button></td>
+    `;
+
+    totalPrice += item.cost;
+    cartListGoods.append(tr);
+  });
+  cartTotalCost.textContent = totalPrice + "₽";
+};
 
 const disableScroll = () => {
   const widthScroll = window.innerWidth - document.body.offsetWidth;
@@ -47,6 +73,7 @@ headerCityButton.addEventListener("click", () => {
 const openCart = () => {
   cartOverlay.classList.add("cart-overlay-open");
   disableScroll();
+  renderCart();
 };
 
 closeCart = (e) => {
@@ -195,6 +222,14 @@ try {
     } else {
       cardGoodSizes.style.display = "none";
     }
+    cardGoodBuy.addEventListener("click", () => {
+      if (color) data.color = cardGoodColor.textContent;
+      if (sizes) data.size = cardGoodSizes.textContent;
+
+      const cardData = getLocalStorage();
+      cardData.push(data);
+      setLocalStorage(cardData);
+    });
   };
 
   cardGoodSelectWrapper.forEach((item) => {
