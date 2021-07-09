@@ -9,6 +9,12 @@ let hash = location.hash.substring(1);
 headerCityButton.textContent =
   localStorage.getItem("lamoda-location") || "What is your city?";
 
+const getLocalStorage = () =>
+  JSON?.parse(localStorage.getItem("cart-lamoda")) || [];
+
+const setLocalStorage = (data) =>
+  localStorage.setItem("cart-lamoda", JSON.stringify(data));
+
 const disableScroll = () => {
   const widthScroll = window.innerWidth - document.body.offsetWidth;
 
@@ -167,7 +173,9 @@ try {
       );
     }, "");
 
-  const renderCardGood = ([{ brand, name, cost, color, sizes, photo }]) => {
+  const renderCardGood = ([{ id, brand, name, cost, color, sizes, photo }]) => {
+    const data = { brand, name, cost, id };
+
     cardGoodImage.src = `goods-image/${photo}`;
     cardGoodImage.alt = `${brand} ${name}`;
     cardGoodBrand.textContent = brand;
